@@ -1,4 +1,3 @@
-
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -7,46 +6,48 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
+import javax.swing.border.EmptyBorder;
 
 
-public class MiniGame extends JFrame {
-    private JPanel panel;
-    private final int width = 700;
-    private int height = 500;
-    private int playerX = 400;
-    private int playerY = 400;
-    private int enemyX = 100;
-    private int enemyY = 100;
-    private int enemyWidth = 20;
-    private int enemyHeight = 20;
-    private int enemySpeed = 2;
-    private boolean gameOver = false;
-    private int score = 0;
-    private Font font = new Font("Arial", Font.BOLD, 24);
-    private ImageIcon playerIcon;
-    private ImageIcon enemyIcon;
-    
+public class MiniGame extends MainMenu {
+	private static final long serialVersionUID = 1L; // Specifies the serial version UID for object serialization.
+	private JPanel contentPane; // Panel for the window content.
+	private final int width = 700; // Window width (x-axis center).
+	private int height = 500; // Window height (y-axis center).
+	private int playerX = 400; // Player position on the x-axis.
+	private int playerY = 400; // Player position on the y-axis.
+	private int enemyX = 100; // Enemy position on the x-axis.
+	private int enemyY = 100; // Enemy position on the y-axis.
+	private int enemyWidth = 20; // Enemy width.
+	private int enemyHeight = 20; // Enemy height.
+	private int enemySpeed = 2; // Enemy speed.
+	private boolean gameOver = false; // Indicates if the game is over.
+	private int score = 0; // Score count.
+	private Font font = new Font("Arial", Font.BOLD, 24); // Font style for text.
+	private ImageIcon playerIcon; // Player icon.
+	private ImageIcon enemyIcon; // Enemy icon.
+	
     public MiniGame() {
-        setTitle("Elephant and the Hunter");
-        setSize(800, 600);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setResizable(false);
-        setLocationRelativeTo(null); //relocate to the center
-
+		contentPane = new JPanel();// Create a new JPanel for the content.
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));// Set an empty border for the content panel.
+		setContentPane(contentPane);// Set the content pane of the window.
+		
+		// Set the application icon
         ImageIcon logo = new ImageIcon("APPLICATION.png");
         setIconImage(logo.getImage());
             
-        playerIcon = new ImageIcon("player.png"); // replace with your own gif file
-        enemyIcon = new ImageIcon("enemy.png"); // replace with your own gif file
+        playerIcon = new ImageIcon("player.png"); // replace with your own png file
+        enemyIcon = new ImageIcon("enemy.png"); // replace with your own png file
 
-        panel = new JPanel() {
-        // load the background image
+        contentPane = new JPanel() {
+		private static final long serialVersionUID = 1L;
+		// load the background image
         private ImageIcon bgIcon = new ImageIcon("grass.jpg");
         private Image bgImage = bgIcon.getImage();
             @Override
@@ -66,9 +67,9 @@ public class MiniGame extends JFrame {
                 }
             }
         };
-        panel.setPreferredSize(new Dimension(width, height));       
-        panel.setFocusable(true);
-        add(panel);
+        contentPane.setPreferredSize(new Dimension(width, height));       
+        contentPane.setFocusable(true);
+        add(contentPane);
         // Create Exit button and add an action listener to it       
         JButton exitButton = new JButton("Exit");
         exitButton.addActionListener(new ActionListener() {
@@ -87,7 +88,7 @@ public class MiniGame extends JFrame {
       
         if (option == JOptionPane.YES_OPTION) {
          // Create and show the other frame
-         Main main = new Main();
+         MainMenu main = new MainMenu();
          main.setVisible(true);
          // Close the current frame
          dispose();
@@ -106,69 +107,69 @@ public class MiniGame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 if (!gameOver) {
                     if (enemyX < playerX) {
-                        enemyX += enemySpeed;
+                        enemyX += enemySpeed; // Move the enemy towards the player on the x-axis.
                     } else {
-                        enemyX -= enemySpeed;
+                        enemyX -= enemySpeed; // Move the enemy away from the player on the x-axis.
                     }
 
                     if (enemyY < playerY) {
-                        enemyY += enemySpeed;
+                        enemyY += enemySpeed; // Move the enemy towards the player on the y-axis.
                     } else {
-                        enemyY -= enemySpeed;
+                        enemyY -= enemySpeed; // Move the enemy away from the player on the y-axis.
                     }
 
                     if (enemyX >= playerX - enemyWidth && enemyX <= playerX + 20
                             && enemyY >= playerY - enemyHeight && enemyY <= playerY + 20) {
-                        gameOver = true;
+                        gameOver = true; // If the enemy collides with the player, set the game over flag to true.
                     }
 
-                    score++;
+                    score++; // Increase the score.
                 }
-                panel.repaint();
+                contentPane.repaint(); // Repaint the content pane to update the game graphics.
             }
         });
         timer.start();
         
          // Add key listener to the panel to move the player
-        panel.addKeyListener(new KeyListener() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                int keyCode = e.getKeyCode();
+        contentPane.addKeyListener(new KeyListener() {
+        	@Override
+        	public void keyPressed(KeyEvent e) {
+        	    int keyCode = e.getKeyCode();
 
-                switch (keyCode) {
-                case KeyEvent.VK_UP:
-                    playerY -= 10;
-                    break;
-                case KeyEvent.VK_DOWN:
-                    playerY += 10;
-                    break;
-                case KeyEvent.VK_LEFT:
-                    playerX -= 10;
-                    break;
-                case KeyEvent.VK_RIGHT:
-                    playerX += 10;
-                    break;
-                case KeyEvent.VK_W:
-                    playerY -= 10;
-                    break;
-                case KeyEvent.VK_S:
-                    playerY += 10;
-                    break;
-                case KeyEvent.VK_A:
-                    playerX -= 10;
-                    break;
-                case KeyEvent.VK_D:
-                    playerX += 10;
-                    break;    
-                }
-            }
+        	    switch (keyCode) {
+        	        case KeyEvent.VK_UP:
+        	            playerY -= 10; // Move the player up by 10 units on the y-axis.
+        	            break;
+        	        case KeyEvent.VK_DOWN:
+        	            playerY += 10; // Move the player down by 10 units on the y-axis.
+        	            break;
+        	        case KeyEvent.VK_LEFT:
+        	            playerX -= 10; // Move the player left by 10 units on the x-axis.
+        	            break;
+        	        case KeyEvent.VK_RIGHT:
+        	            playerX += 10; // Move the player right by 10 units on the x-axis.
+        	            break;
+        	        case KeyEvent.VK_W:
+        	            playerY -= 10; // Move the player up by 10 units on the y-axis (alternative control).
+        	            break;
+        	        case KeyEvent.VK_S:
+        	            playerY += 10; // Move the player down by 10 units on the y-axis (alternative control).
+        	            break;
+        	        case KeyEvent.VK_A:
+        	            playerX -= 10; // Move the player left by 10 units on the x-axis (alternative control).
+        	            break;
+        	        case KeyEvent.VK_D:
+        	            playerX += 10; // Move the player right by 10 units on the x-axis (alternative control).
+        	            break;    
+        	    }
+        	}
 
-            @Override
-            public void keyReleased(KeyEvent e) {}
+        	@Override
+        	public void keyReleased(KeyEvent e) {}
 
-            @Override
-            public void keyTyped(KeyEvent e) {}
+        	@Override
+        	public void keyTyped(KeyEvent e) {}
         });
     }
+    
 }
-
