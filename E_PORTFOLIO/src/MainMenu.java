@@ -30,7 +30,7 @@ public class MainMenu extends JFrame {
 
 
     public MainMenu() {
-    	super("E-Porfolio"); // Create a JFrame with the title "E-Porfolio"
+    	super("E-Portfolio"); // Create a JFrame with the title "E-Portfolio"
     	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Set the default close operation to exit the application when the frame is closed
     	setBounds(100, 100, 1120, 646); // Set the position and size of the frame to (x, y, width, height)
     	contentPane = new JPanel(); // Create a new JPanel to serve as the content pane
